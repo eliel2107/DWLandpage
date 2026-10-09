@@ -25,10 +25,10 @@ section[id]{scroll-margin-top:88px}
 /* header */
 .nl{color:#C9D1D6;text-decoration:none;padding:12px 0 4px;background:linear-gradient(currentColor,currentColor) no-repeat 0 100%/0% 1px;transition:background-size var(--dur-3) var(--ease-io),color var(--dur-2) var(--ease-std)}
 .nl:hover{color:#FFFFFF;background-size:100% 1px}
-.menu-btn{display:none}
+.menu-btn.btn{display:none}
 @media (max-width:860px){
 .nav-links{display:none}
-.menu-btn{display:inline-flex}
+.menu-btn.btn{display:inline-flex}
 .brand-sub{display:none}
 }
 
@@ -172,6 +172,7 @@ section[id]{scroll-margin-top:88px}
 .prof .trace{stroke-dashoffset:0 !important}
 .zoom:hover img{scale:none}
 .slide,.pane{transition:opacity 200ms linear !important}
+}
 
 /* site estático */
 [hidden]{display:none !important}
