@@ -231,13 +231,29 @@
   /* ---------------- Marquees: duplica itens para o loop contínuo ---------------- */
   if (!rm) {
     document.querySelectorAll('.lane .track').forEach(function (track) {
-      Array.prototype.slice.call(track.children).forEach(function (item) {
+      var originals = Array.prototype.slice.call(track.children);
+      // troca o gap por margem em cada item, para o loop de -50% fechar sem "pulo"
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      if (gap) {
+        track.style.gap = '0px';
+        originals.forEach(function (item) { item.style.marginRight = gap + 'px'; });
+      }
+      var cloneOf = function (item) {
         var c = item.cloneNode(true);
         c.setAttribute('aria-hidden', 'true');
         if (c.matches('button, a')) c.setAttribute('tabindex', '-1');
         c.querySelectorAll('button, a').forEach(function (el) { el.setAttribute('tabindex', '-1'); });
-        track.appendChild(c);
-      });
+        return c;
+      };
+      // repete o conjunto até cobrir a largura da faixa (telas largas), depois duplica tudo para o loop
+      var setW = track.scrollWidth || 1;
+      var laneW = Math.max(track.parentElement.clientWidth, window.screen ? window.screen.width : 0);
+      var reps = Math.max(1, Math.ceil(laneW / setW));
+      for (var r = 1; r < reps; r++) originals.forEach(function (item) { track.appendChild(cloneOf(item)); });
+      Array.prototype.slice.call(track.children).forEach(function (item) { track.appendChild(cloneOf(item)); });
+      // mantém a mesma velocidade, mesmo com mais itens
+      var dur = parseFloat(getComputedStyle(track).animationDuration) || 70;
+      if (reps > 1) track.style.animationDuration = (dur * reps) + 's';
     });
   }
 
